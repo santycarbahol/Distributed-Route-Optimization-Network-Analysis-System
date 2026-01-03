@@ -1,0 +1,23 @@
+# client/client.py
+import socket
+import json
+
+graph = {
+    "A": {"B": 4, "C": 2},
+    "B": {"C": 5, "D": 10},
+    "C": {"E": 3},
+    "E": {"D": 4},
+    "D": {}
+}
+
+payload = {
+    "graph": graph,
+    "start": "A",
+    "end": "D"
+}
+
+sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+sock.sendto(json.dumps(payload).encode(), ("127.0.0.1", 5050))
+
+response, _ = sock.recvfrom(4096)
+print("Server response:", response.decode())
