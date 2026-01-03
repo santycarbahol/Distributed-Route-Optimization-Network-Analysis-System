@@ -1,0 +1,29 @@
+# server/server.py
+import socket
+import json
+from algorithms.dijkstra import dijkstra
+
+SERVER_IP = "127.0.0.1"
+PORT = 5050
+
+sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+sock.bind((SERVER_IP, PORT))
+
+print("Routing server running...")
+
+while True:
+    data, addr = sock.recvfrom(4096)
+    payload = json.loads(data.decode())
+
+    graph = payload["graph"]
+    start = payload["start"]
+    end = payload["end"]
+
+    cost, path = dijkstra(graph, start, end)
+
+    response = json.dumps({
+        "cost": cost,
+        "path": path
+    })
+
+    sock.sendto(response.encode(), addr)
