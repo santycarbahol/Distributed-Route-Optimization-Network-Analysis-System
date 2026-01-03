@@ -1,0 +1,30 @@
+# algorithms/dijkstra.py
+import heapq
+
+def dijkstra(graph, start, end):
+    pq = [(0, start)]
+    distances = {node: float("inf") for node in graph}
+    distances[start] = 0
+    previous = {}
+
+    while pq:
+        current_dist, node = heapq.heappop(pq)
+
+        if node == end:
+            break
+
+        for neighbor, weight in graph[node].items():
+            new_dist = current_dist + weight
+            if new_dist < distances[neighbor]:
+                distances[neighbor] = new_dist
+                previous[neighbor] = node
+                heapq.heappush(pq, (new_dist, neighbor))
+
+    path = []
+    cur = end
+    while cur in previous:
+        path.append(cur)
+        cur = previous[cur]
+    path.append(start)
+
+    return distances[end], path[::-1]
