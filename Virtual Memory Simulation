@@ -1,0 +1,31 @@
+# memory/vm_simulator.py
+def lru(pages, frames):
+    memory = []
+    faults = 0
+
+    for page in pages:
+        if page not in memory:
+            faults += 1
+            if len(memory) == frames:
+                memory.pop(0)
+        else:
+            memory.remove(page)
+        memory.append(page)
+
+    return faults
+
+def fifo(pages, frames):
+    memory = []
+    faults = 0
+    idx = 0
+
+    for page in pages:
+        if page not in memory:
+            faults += 1
+            if len(memory) < frames:
+                memory.append(page)
+            else:
+                memory[idx] = page
+                idx = (idx + 1) % frames
+
+    return faults
