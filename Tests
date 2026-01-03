@@ -1,0 +1,12 @@
+# tests/test_algorithms.py
+from algorithms.dijkstra import dijkstra
+
+def test_shortest_path():
+    graph = {
+        "A": {"B": 1},
+        "B": {"C": 2},
+        "C": {}
+    }
+    cost, path = dijkstra(graph, "A", "C")
+    assert cost == 3
+    assert path == ["A", "B", "C"]
